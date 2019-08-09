@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder "C:\\centos7\\environment", "/root/environment", owner: "root", group: "root" 
   config.vm.synced_folder "C:\\centos7\\www", "/var/www", owner: "root", group: "root" 
 
   # Provider-specific configuration so you can fine-tune various
@@ -69,54 +70,11 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", inline: <<-SHELL
+  # config.vm.provision "shell", inline: <<-SHELL
   #   apt-get update
   #   apt-get install -y apache2
+  # SHELL
 
-setenforce 0
-timedatectl set-timezone Asia/Tokyo
+  config.vm.provision "shell", path: "init.sh"
 
-yum -y update
-yum -y install https://centos7.iuscommunity.org/ius-release.rpm
-
-# httpdインストール
-yum -y install https://centos7.iuscommunity.org/ius-release.rpm
-yum -y install openldap-devel expat-devel libdb-devel mailcap system-logos
-yum --disablerepo=base,extras,updates --enablerepo=ius -y install httpd
-systemctl enable httpd.service
-
-# PHPインストール
-yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-yum -y update
-yum -y install --enablerepo=remi,remi-php73 php php-devel php-mbstring php-pdo php-gd php-xml php-mcrypt
-
-# MySQLインストール
-yum -y remove mariadb-libs
-rm -rf /var/lib/mysql/
-rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm
-yum -y install mysql-community-server
-systemctl enable mysqld.service
-
-# Postfixインストール
-rpm -ivh http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm
-yum -y --enablerepo=gf-plus install postfix3
-cp -p /etc/postfix/main.cf /etc/postfix/main.cf_20190806
-systemctl enable postfix
-
-# gitインストール
-yum -y install gcc curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker
-git clone git://git.kernel.org/pub/scm/git/git.git
-cd git
-make prefix=/usr/local all
-make prefix=/usr/local install
-export PATH=/usr/local/bin:$PATH
-cd ..
-rm -rf git
-
-# 起動
-systemctl start postfix
-systemctl start mysqld.service
-systemctl start httpd.service
-
-  SHELL
 end
