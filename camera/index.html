@@ -11,12 +11,12 @@
 </head>
 <body>
 
-<h1>HTML5ƒJƒƒ‰</h1>
+<h1>HTML5ã‚«ãƒ¡ãƒ©</h1>
 
 <video id="camera" width="300" height="200"></video>
 <canvas id="picture" width="300" height="200"></canvas>
 <form>
-  <button type="button" id="shutter">ƒVƒƒƒbƒ^[</button>
+  <button type="button" id="shutter">ã‚·ãƒ£ãƒƒã‚¿ãƒ¼</button>
 </form>
 
 <audio id="se" preload="auto">
@@ -29,19 +29,19 @@ window.onload = () => {
   const canvas = document.querySelector("#picture");
   const se     = document.querySelector('#se');
 
-  /** ƒJƒƒ‰İ’è */
+  /** ã‚«ãƒ¡ãƒ©è¨­å®š */
   const constraints = {
     audio: false,
     video: {
       width: 300,
       height: 200,
-      facingMode: "user"   // ƒtƒƒ“ƒgƒJƒƒ‰‚ğ—˜—p‚·‚é
-      // facingMode: { exact: "environment" }  // ƒŠƒAƒJƒƒ‰‚ğ—˜—p‚·‚éê‡
+      facingMode: "user"   // ãƒ•ãƒ­ãƒ³ãƒˆã‚«ãƒ¡ãƒ©ã‚’åˆ©ç”¨ã™ã‚‹
+      // facingMode: { exact: "environment" }  // ãƒªã‚¢ã‚«ãƒ¡ãƒ©ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆ
     }
   };
 
   /**
-   * ƒJƒƒ‰‚ğ<video>‚Æ“¯Šú
+   * ã‚«ãƒ¡ãƒ©ã‚’<video>ã¨åŒæœŸ
    */
   navigator.mediaDevices.getUserMedia(constraints)
   .then( (stream) => {
@@ -55,19 +55,19 @@ window.onload = () => {
   });
 
   /**
-   * ƒVƒƒƒbƒ^[ƒ{ƒ^ƒ“
+   * ã‚·ãƒ£ãƒƒã‚¿ãƒ¼ãƒœã‚¿ãƒ³
    */
    document.querySelector("#shutter").addEventListener("click", () => {
     const ctx = canvas.getContext("2d");
 
-    // ‰‰o“I‚È–Ú“I‚Åˆê“x‰f‘œ‚ğ~‚ß‚ÄSE‚ğÄ¶‚·‚é
-    video.pause();  // ‰f‘œ‚ğ’â~
-    se.play();      // ƒVƒƒƒbƒ^[‰¹
+    // æ¼”å‡ºçš„ãªç›®çš„ã§ä¸€åº¦æ˜ åƒã‚’æ­¢ã‚ã¦SEã‚’å†ç”Ÿã™ã‚‹
+    video.pause();  // æ˜ åƒã‚’åœæ­¢
+    se.play();      // ã‚·ãƒ£ãƒƒã‚¿ãƒ¼éŸ³
     setTimeout( () => {
-      video.play();    // 0.5•bŒã‚ÉƒJƒƒ‰ÄŠJ
+      video.play();    // 0.5ç§’å¾Œã«ã‚«ãƒ¡ãƒ©å†é–‹
     }, 500);
 
-    // canvas‚É‰æ‘œ‚ğ“\‚è•t‚¯‚é
+    // canvasã«ç”»åƒã‚’è²¼ã‚Šä»˜ã‘ã‚‹
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   });
 };
