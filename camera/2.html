@@ -9,14 +9,15 @@
 
 <!-- カメラ映像が描画されます。 -->
 <video id="video_area" style="background-color: #000" autoplay></video>
+<canvas id="picture" width="300" height="200"></canvas>
 
-<!-- 押下するとカメラ映像描画を開始します。 -->
-<button id="start_btn">映像表示開始</button>
+<!-- 押下するとカメラ映像描画を開始します。
+<button id="start_btn">映像表示開始</button> -->
+<button id="shutter">シャッター</button>
 
 </body>
 <script>
 
-    // getUserMedia が使えないときは、『getUserMedia()が使えないブラウザだよ』と言ってね。
     if (typeof navigator.mediaDevices.getUserMedia !== 'function') {
         const err = new Error('getUserMedia()が使えないブラウザだよ');
         alert(`${err.name} ${err.message}`);
@@ -24,15 +25,32 @@
     }
 
     // 操作する画面エレメント変数定義します。
-    const $start = document.getElementById('start_btn');   // スタートボタン
-    const $video = document.getElementById('video_area');  // 映像表示エリア
+    const video = document.getElementById('video_area');
 
-    // 「スタートボタン」を押下で、getUserMedia を使って映像を「映像表示エリア」に表示するよ。
-    $start.addEventListener('click', () => {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        .then(stream => $video.srcObject = stream)
-        .catch(err => alert(`${err.name} ${err.message}`));
-    }, false);
+    // 映像を「映像表示エリア」に表示
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => video.srcObject = stream)
+    .catch(err => alert(`${err.name} ${err.message}`));
+
+
+
+  const canvas = document.querySelector("#picture");
+
+  /**
+   * シャッターボタン
+   */
+   document.querySelector("#shutter").addEventListener("click", () => {
+    const ctx = canvas.getContext("2d");
+
+    // 演出的な目的で一度映像を止めてSEを再生する
+    video.pause();  // 映像を停止
+    setTimeout( () => {
+      video.play();    // 0.5秒後にカメラ再開
+    }, 500);
+
+    // canvasに画像を貼り付ける
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  });
 
 </script>
 
