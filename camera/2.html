@@ -8,12 +8,13 @@
 <body>
 
 <!-- カメラ映像が描画されます。 -->
-<video id="video_area" style="background-color: #000" autoplay></video>
-<canvas id="picture" width="300" height="200"></canvas>
+<video id="video_area" width="300" height="200" style="background-color: #000;border: solid 1px #000" autoplay></video>
+<button id="shutter">シャッター</button>
+<canvas id="picture" width="300" height="200" style="background-color: #fff;border: solid 1px #000"></canvas>
 
 <!-- 押下するとカメラ映像描画を開始します。
 <button id="start_btn">映像表示開始</button> -->
-<button id="shutter">シャッター</button>
+
 
 </body>
 <script>
@@ -28,7 +29,11 @@
     const video = document.getElementById('video_area');
 
     // 映像を「映像表示エリア」に表示
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    navigator.mediaDevices.getUserMedia({ video: {
+      facingMode: {
+        exact: 'environment'
+      }
+    }, audio: false })
     .then(stream => video.srcObject = stream)
     .catch(err => alert(`${err.name} ${err.message}`));
 
@@ -42,7 +47,7 @@
    document.querySelector("#shutter").addEventListener("click", () => {
     const ctx = canvas.getContext("2d");
 
-    // 演出的な目的で一度映像を止めてSEを再生する
+    // 演出的な目的
     video.pause();  // 映像を停止
     setTimeout( () => {
       video.play();    // 0.5秒後にカメラ再開
