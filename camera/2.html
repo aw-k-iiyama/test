@@ -8,7 +8,7 @@
 <body>
 
 <!-- カメラ映像が描画されます。 -->
-<video id="video_area" width="600" height="400" style="background-color: #000;border: solid 1px #000" autoplay></video>
+<video id="video_area"s style="background-color: #000;border: solid 1px #000" autoplay></video>
 <button id="shutter">シャッター</button>
 <canvas id="picture" style="background-color: #fff;border: solid 1px #000"></canvas>
 
@@ -56,6 +56,17 @@
     // canvasに画像を貼り付ける
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   });
+
+//onresizeメッセージのコールバック関数を設定する
+function notify_change_size() {
+    var video = document.getElementById('video_area');
+    video_layout_width  = video.clientWidth
+    video_layout_height = video.clientHeight
+    var picture = document.getElementById('picture');
+    picture.style.width=video_layout_width;
+    picture.style.height=video_layout_height;
+}
+video.onresize = notify_change_size;
 
 </script>
 
